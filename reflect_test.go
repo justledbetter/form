@@ -212,9 +212,10 @@ func Test_fields(t *testing.T) {
 					Type:        "text",
 					Value:       "Michael Scott",
 				}, {
-					ID:          "address",
-					Name:        "Address",
-					Type:        "section",
+					ID:    "address",
+					Name:  "Address",
+					Label: "Address",
+					Type:  "section",
 				}, {
 					Name:        "Address.Street1",
 					Label:       "Street1",

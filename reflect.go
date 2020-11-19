@@ -64,9 +64,18 @@ func fields(v interface{}, names ...string) []field {
 
 			// Append a divider "field," when the struct has the tag "header=true"
 			if _, ok := tags["header"]; ok {
-				ret = append(ret, field{Name:t.Field(i).Name, ID:strings.ToLower(t.Field(i).Name), Type:"section"})
+				name := append(names, t.Field(i).Name)
+				f := field{
+					Name:  strings.Join(name, "."),
+					ID:    strings.ToLower(t.Field(i).Name),
+					Label: t.Field(i).Name,
+					Type:  "section",
+				}
+				applyTags(&f, tags)
+				ret = append(ret, f)
 			}
 
+			// Recurse into substruct
 			ret = append(ret, fields(rf.Interface(), append(names, t.Field(i).Name)...)...)
 			continue
 		}
