@@ -47,15 +47,6 @@ func fields(v interface{}, names ...string) []field {
 			rf = reflect.New(t.Field(i).Type.Elem()).Elem()
 		}
 
-		// If this is a struct it has nested fields we need to add. The
-		// simplest way to do this is to recursively call `fields` but
-		// to provide the name of this struct field to be added as a prefix
-		// to the fields.
-		if rf.Kind() == reflect.Struct {
-			ret = append(ret, fields(rf.Interface(), append(names, t.Field(i).Name)...)...)
-			continue
-		}
-
 		// If we are still in this loop then we aren't dealing with a nested
 		// struct and need to add the field. First we check to see if the
 		// ignore tag is present, then we set default values, then finally
@@ -64,6 +55,22 @@ func fields(v interface{}, names ...string) []field {
 		if _, ok := tags["-"]; ok {
 			continue
 		}
+
+		// If this is a struct it has nested fields we need to add. The
+		// simplest way to do this is to recursively call `fields` but
+		// to provide the name of this struct field to be added as a prefix
+		// to the fields.
+		if rf.Kind() == reflect.Struct {
+
+			// Append a divider "field," when the struct has the tag "header=true"
+			if _, ok := tags["header"]; ok {
+				ret = append(ret, field{Name:t.Field(i).Name, ID:strings.ToLower(t.Field(i).Name), Type:"section"})
+			}
+
+			ret = append(ret, fields(rf.Interface(), append(names, t.Field(i).Name)...)...)
+			continue
+		}
+
 		name := append(names, t.Field(i).Name)
 		f := field{
 			Name:        strings.Join(name, "."),

@@ -195,6 +195,52 @@ func Test_fields(t *testing.T) {
 					Value:       "",
 				},
 			},
+		}, {
+			name: "nested with section header",
+			arg: struct {
+				Name    string
+				Address *address `form:"header=true"`
+			}{
+				Name:    "Michael Scott",
+				Address: nil,
+			},
+			want: []field{
+				{
+					Name:        "Name",
+					Label:       "Name",
+					Placeholder: "Name",
+					Type:        "text",
+					Value:       "Michael Scott",
+				}, {
+					ID:          "address",
+					Name:        "Address",
+					Type:        "section",
+				}, {
+					Name:        "Address.Street1",
+					Label:       "Street1",
+					Placeholder: "Street1",
+					Type:        "text",
+					Value:       "",
+				},
+			},
+		}, {
+			name: "nested skipping substruct",
+			arg: struct {
+				Name    string
+				Address *address `form:"-"`
+			}{
+				Name:    "Michael Scott",
+				Address: nil,
+			},
+			want: []field{
+				{
+					Name:        "Name",
+					Label:       "Name",
+					Placeholder: "Name",
+					Type:        "text",
+					Value:       "Michael Scott",
+				},
+			},
 		},
 	}
 	for _, tc := range tests {
