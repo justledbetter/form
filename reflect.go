@@ -120,6 +120,9 @@ func applyTags(f *field, tags map[string]string) {
 	if v, ok := tags["readonly"]; ok {
 		f.ReadOnly = v == "true"
 	}
+	if v, ok := tags["value"]; ok {
+		f.Value = v
+	}
 }
 
 func parseTags(tags string) map[string]string {

@@ -277,6 +277,25 @@ func Test_fields(t *testing.T) {
 					ReadOnly:    true,
 				},
 			},
+		}, {
+			name: "field with value",
+			arg: struct {
+				Name    string   `form:"value=hardcoded"`
+				Address *address `form:"-"`
+			}{
+				Name:    "Michael Scott",
+				Address: nil,
+			},
+			want: []field{
+				{
+					Name:        "Name",
+					Label:       "Name",
+					Placeholder: "Name",
+					Type:        "text",
+					Value:       "hardcoded",
+					ReadOnly:    false,
+				},
+			},
 		},
 	}
 	for _, tc := range tests {

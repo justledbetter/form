@@ -99,7 +99,16 @@ func (b *Builder) Inputs(v interface{}, errs ...error) (template.HTML, error) {
 		if err != nil {
 			return "", err
 		}
-		html = html + template.HTML(sb.String())
+
+		fh := template.HTML(sb.String())
+
+		// Field contains possible translations.
+		if strings.Contains(sb.String(),"{{") {
+			println("TODO: Got here")
+		}
+
+		html = html + fh
+
 	}
 	return html, nil
 }
